@@ -1,0 +1,17 @@
+{
+  "name": "approov-quickstart-nodejs-grpc",
+  "version": "1.0.0",
+  "description": "Approov quickstart for NodeJS GRPC token check.",
+  "main": "hello-client.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node hello-client.js"
+  },
+  "author": "johanness@criticalblue.com",
+  "license": "MIT",
+  "dependencies": {
+    "google-protobuf": "^3.19.4",
+    "@grpc/grpc-js": "^1.5.4",
+    "minimist": "^1.2.5"
+  }
+}
