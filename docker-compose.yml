@@ -1,0 +1,101 @@
+version: "2.3"
+
+services:
+
+  unprotected:
+    image: approov/nodejs-grpc:unprotected
+    build:
+      context: .
+    environment:
+      - DEBUG=hello-server
+    env_file:
+      - .env
+    networks:
+      - traefik
+      - default
+    command: sh -c "npm install && npm start"
+    ports:
+      - ${HOST_IP:-127.0.0.1}:${GRPC_PORT:-50051}:${GRPC_PORT:-50051}
+    volumes:
+      - ./src/unprotected-server:/home/node/workspace
+    labels:
+      - "traefik.enable=true"
+      # Override the container name in the generated name of the backend.
+      - "traefik.backend=unprotected-grpc.${BASE_PUBLIC_DOMAIN? Missing value for: BASE_PUBLIC_DOMAIN}"
+      # Override the default docker network to use for connections to the container.
+      - "traefik.docker.network=traefik"
+      # Assign this frontend to entry point grpc. Overrides defaultEntryPoints.
+      - "traefik.frontend.entryPoints=grpc"
+      # Override the default frontend rule. Default: Host:{service}.{project_name}.{domain} if you are using docker-compose.
+      - "traefik.frontend.rule=Host:unprotected-grpc.${BASE_PUBLIC_DOMAIN}"
+      # Register this port (useful when the container exposes multiples ports).
+      - "traefik.port=${GRPC_PORT:-50051}"
+      # Override the default http protocol
+      - "traefik.protocol=h2c"
+
+  approov-token:
+    image: approov/nodejs-grpc:approov-token
+    build:
+      context: .
+    restart: always
+    environment:
+      - DEBUG=hello-server
+    env_file:
+      - .env
+    networks:
+      - traefik
+      - default
+    command: sh -c "npm install && npm start"
+    ports:
+      - ${HOST_IP:-127.0.0.1}:${GRPC_PORT:-50051}:${GRPC_PORT:-50051}
+    volumes:
+      - ./src/approov-protected-server/token-check:/home/node/workspace
+    labels:
+      - "traefik.enable=true"
+      # Override the container name in the generated name of the backend.
+      - "traefik.backend=token-grpc.${BASE_PUBLIC_DOMAIN? Missing value for: BASE_PUBLIC_DOMAIN}"
+      # Override the default docker network to use for connections to the container.
+      - "traefik.docker.network=traefik"
+      # Assign this frontend to entry point grpc. Overrides defaultEntryPoints.
+      - "traefik.frontend.entryPoints=grpc"
+      # Override the default frontend rule. Default: Host:{service}.{project_name}.{domain} if you are using docker-compose.
+      - "traefik.frontend.rule=Host:grpc.${BASE_PUBLIC_DOMAIN},token-grpc.${BASE_PUBLIC_DOMAIN}"
+      # Register this port (useful when the container exposes multiples ports).
+      - "traefik.port=${GRPC_PORT:-50051}"
+      # Override the default http protocol
+      - "traefik.protocol=h2c"
+
+  approov-token-binding:
+    image: approov/nodejs-grpc:approov-token-binding
+    build:
+      context: .
+    environment:
+      - DEBUG=hello-server
+    env_file:
+      - .env
+    networks:
+      - traefik
+      - default
+    command: sh -c "npm install && npm start"
+    ports:
+      - ${HOST_IP:-127.0.0.1}:${GRPC_PORT:-50051}:${GRPC_PORT:-50051}
+    volumes:
+      - ./src/approov-protected-server/token-binding-check:/home/node/workspace
+    labels:
+      - "traefik.enable=true"
+      # Override the container name in the generated name of the backend.
+      - "traefik.backend=token-binding-grpc.${BASE_PUBLIC_DOMAIN? Missing value for: BASE_PUBLIC_DOMAIN}"
+      # Override the default docker network to use for connections to the container.
+      - "traefik.docker.network=traefik"
+      # Assign this frontend to entry point grpc. Overrides defaultEntryPoints.
+      - "traefik.frontend.entryPoints=grpc"
+      # Override the default frontend rule. Default: Host:{service}.{project_name}.{domain} if you are using docker-compose.
+      - "traefik.frontend.rule=Host:token-binding-grpc.${BASE_PUBLIC_DOMAIN}"
+      # Register this port (useful when the container exposes multiples ports).
+      - "traefik.port=${GRPC_PORT:-50051}"
+      # Override the default http protocol
+      - "traefik.protocol=h2c"
+
+networks:
+  traefik:
+    external: true
