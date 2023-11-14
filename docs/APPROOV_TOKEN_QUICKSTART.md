@@ -54,10 +54,10 @@ approov secret -get base64
 
 #### Set the Approov Secret
 
-Open the `.env` file and add the Approov secret to the var by replacing the string  `<approov_base64_secret_here>`:
+Open the `.env` file and add the Approov secret to the var by replacing the string  `approov-base64-encoded-secret-here`:
 
 ```text
-APPROOV_BASE64_SECRET=<approov_base64_secret_here>
+APPROOV_BASE64_SECRET=approov-base64-encoded-secret-here
 ```
 
 [TOC](#toc---table-of-contents)

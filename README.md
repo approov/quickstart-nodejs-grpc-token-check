@@ -157,7 +157,7 @@ enter password:
 note: secret is base64 encoded and must be decoded to its binary form to verify Approov tokens
 h+CX0tOzdAAR9l15bWAqvq7w9olk66daIH+Xk+IAHhVVHszjDzeGobzNnqyRze3lw/WVyWrc2gZfh3XXfBOmww==
 ```
-For the server to use the secret, you need to set `APPROOV_BASE64_SECRET`, in the `.env` file in the Approov integration example server directory [src/approov-protected-server/token-ckeck](/src/approov-protected-server/token-ckeck), to the value retrieved in the previous step. For this, copy the file `.env.example` to `.env`, open `.env` in an editor and replace the text `<approov_base64_secret_here>` with the secret, like in this example:
+For the server to use the secret, you need to set `APPROOV_BASE64_SECRET`, in the `.env` file in the Approov integration example server directory [src/approov-protected-server/token-ckeck](/src/approov-protected-server/token-ckeck), to the value retrieved in the previous step. For this, copy the file `.env.example` to `.env`, open `.env` in an editor and replace the text `approov-base64-encoded-secret-here` with the secret, like in this example:
 ```
 APPROOV_BASE64_SECRET=h+CX0tOzdAAR9l15bWAqvq7w9olk66daIH+Xk+IAHhVVHszjDzeGobzNnqyRze3lw/WVyWrc2gZfh3XXfBOmww==
 ```
