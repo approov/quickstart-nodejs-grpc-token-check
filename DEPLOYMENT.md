@@ -24,6 +24,14 @@ cp .env.example .env
 ```
 > **IMPORTANT:** Add the secret as instructed in the `.env` file comments.
 
+Copy the `.env` file to the individual service directories:
+
+```shell
+cp .env src/unprotected-server/
+cp .env src/approov-protected-server/token-check/
+cp .env src/approov-protected-server/token-binding-check/
+```
+
 Run all services in the background:
 
 ```shell
