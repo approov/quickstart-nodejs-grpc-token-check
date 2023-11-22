@@ -15,7 +15,8 @@ services:
       - ./unprotected-server:/home/node/workspace
       - ./.env:/home/node/workspace/.env
     ports:
-      - 127.0.0.1:${GRPC_PORT:-50051}:${GRPC_PORT:-50051}
+      # Expose locally for testing
+      - 127.0.0.1:50052:${GRPC_PORT:-50051}
     labels:
       - "traefik.enable=true"
       # Override the container name in the generated name of the backend. Does not need to match the domain name.
@@ -45,7 +46,8 @@ services:
       - ./approov-protected-server/token-check:/home/node/workspace
       - ./.env:/home/node/workspace/.env
     ports:
-      - 127.0.0.1:${GRPC_PORT:-50051}:${GRPC_PORT:-50051}
+      # Expose locally for testing
+      - 127.0.0.1:50053:${GRPC_PORT:-50051}
     labels:
       - "traefik.enable=true"
       # The container name in the generated name of the backend. Does not need to match the domain name.
@@ -74,7 +76,8 @@ services:
       - ./approov-protected-server/token-binding-check:/home/node/workspace
       - ./.env:/home/node/workspace/.env
     ports:
-      - 127.0.0.1:${GRPC_PORT:-50051}:${GRPC_PORT:-50051}
+      # Expose locally for testing
+      - 127.0.0.1:50054:${GRPC_PORT:-50051}
     labels:
       - "traefik.enable=true"
       # The container name in the generated name of the backend. Does not need to match the domain name.
