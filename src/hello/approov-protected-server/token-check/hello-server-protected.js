@@ -1,4 +1,4 @@
-// Hello server definition for Node GRPC Approov Token-Check Quickstart
+// Hello server for Node GRPC Approov Token-Check Quickstart
 //
 // MIT License
 //
@@ -20,18 +20,20 @@
 const messages = require('./hello_pb');
 const services = require('./hello_grpc_pb');
 
-const debug = require('debug')('hello-server')
-const dotenv = require('dotenv').config()
+const debug = require('debug')('hello-server');
+const dotenv = require('dotenv').config();
 const grpc = require('@grpc/grpc-js');
+const jwt = require('jsonwebtoken');
 
 
 if (dotenv.error) {
-  console.debug('FAILED TO PARSE `.env` FILE | ' + dotenv.error)
+  console.debug('FAILED TO PARSE `.env` FILE | ' + dotenv.error);
+  console.log('Not using .env file, using built-in defaults');
 }
 
 
 /** Message contained in a hello reply */
-const helloWorldMessage = "Hello, World!"
+const helloWorldMessage = "Hello, World!";
 
 // The hostname. To run in a docker container add to the .env file `SERVER_HOSTNAME=0.0.0.0`.
 const hostname = dotenv?.parsed?.SERVER_HOSTNAME || 'localhost';
@@ -39,11 +41,44 @@ const hostname = dotenv?.parsed?.SERVER_HOSTNAME || 'localhost';
 // The port from the .env file. Defaults to 50051
 const port = dotenv?.parsed?.GRPC_PORT || 50051;
 
+// The decoded Approv secret
+const approovSecret = Buffer.from(dotenv.parsed.APPROOV_BASE64_SECRET || '', 'base64');
+
+
+/**
+ * Checks the validity of an Approov token
+ */
+const verifyApproovToken = function(approovTokenHeader) {
+  // Check that Approov token is present
+  if (!approovTokenHeader || !approovTokenHeader.length) {
+    // You may want to add some logging here.
+    return false;
+  }
+  // Check that Approov token is valid
+  try {
+    const approovToken = approovTokenHeader[0]
+    var decodedClaims = jwt.verify(approovToken, approovSecret, {algorithms: ["HS256"]});
+  } catch(err) {
+    // You may want to add some logging here.
+    return false;
+  }
+  // The Approov token was successfully verified
+  return true;
+}
+
 /**
  * Implements the hello RPC
  */
 function hello(call, callback) {
-  // Reply with a hello
+  // Get the Approov token from the metadata and check its presence and validity
+  var approovTokenHeader = call.metadata.get('approov-token');
+  if (!verifyApproovToken(approovTokenHeader)) {
+    const error = new Error("Unauthorized");
+    console.log(error.message);
+    callback(error, null);
+    return;
+  }
+  // Approov token is valid, reply with a hello
   var reply = new messages.HelloReply();
   reply.setMessage(helloWorldMessage);
   console.log(reply.getMessage());
@@ -61,7 +96,7 @@ function main() {
   let credentials = grpc.ServerCredentials.createInsecure();
 
   server.bindAsync(hostname + ':' + port, credentials, () => {
-    console.log(`Unprotected server running at ${hostname}:${port}`);
+    console.log(`Approov protected server running at ${hostname}:${port}`);
     server.start();
   });
 }

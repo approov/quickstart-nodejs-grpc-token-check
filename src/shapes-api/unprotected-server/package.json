@@ -2,10 +2,10 @@
   "name": "approov-quickstart-nodejs-grpc",
   "version": "1.0.0",
   "description": "Approov quickstart for NodeJS GRPC token check.",
-  "main": "src/index.js",
+  "main": "src/shapes-api/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node hello-server-unprotected.js"
+    "start": "node shapes-server-unprotected.js"
   },
   "author": "johanness@criticalblue.com",
   "license": "MIT",

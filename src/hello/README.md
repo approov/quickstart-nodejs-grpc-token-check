@@ -9,4 +9,4 @@ grpc_tools_node_protoc --js_out=import_style=commonjs,binary:approov-protected-s
 grpc_tools_node_protoc --js_out=import_style=commonjs,binary:approov-protected-server/token-binding-check --grpc_out=grpc_js:approov-protected-server/token-binding-check hello.proto
 ```
 
-These generated sources are used by the server and client code located in the directories (relative to the root of the repo): `example`, `src/unprotected-server`, `src/approov-protected-server/token-check`, `src/approov-protected-server/token-binding-check`. This is for information only, as these directories already contain copies of all relevant generated sources.
+These generated sources are used by the server and client code located in the directories (relative to the root of the repo): `example`, `src/hello/unprotected-server`, `src/hello/approov-protected-server/token-check`, `src/hello/approov-protected-server/token-binding-check`. This is for information only, as these directories already contain copies of all relevant generated sources.

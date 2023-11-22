@@ -1,4 +1,4 @@
-// Hello server for Node GRPC Approov Token-Check Quickstart
+// Unprotected shapes server for Node GRPC Approov Backend Integration Quickstart
 //
 // MIT License
 //
@@ -17,22 +17,20 @@
 // COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-const messages = require('./hello_pb');
-const services = require('./hello_grpc_pb');
+const messages = require('./shapes_pb');
+const services = require('./shapes_grpc_pb');
 
-const debug = require('debug')('hello-server');
+const debug = require('debug')('shapes-server')
 const dotenv = require('dotenv').config();
 const grpc = require('@grpc/grpc-js');
-const jwt = require('jsonwebtoken');
-
 
 if (dotenv.error) {
   console.debug('FAILED TO PARSE `.env` FILE | ' + dotenv.error);
+  console.log('Not using .env file, using built-in defaults');
 }
 
-
 /** Message contained in a hello reply */
-const helloWorldMessage = "Hello, World!";
+const helloWorldMessage = "Hello, World!"
 
 // The hostname. To run in a docker container add to the .env file `SERVER_HOSTNAME=0.0.0.0`.
 const hostname = dotenv?.parsed?.SERVER_HOSTNAME || 'localhost';
@@ -43,41 +41,23 @@ const port = dotenv?.parsed?.GRPC_PORT || 50051;
 // The decoded Approv secret
 const approovSecret = Buffer.from(dotenv.parsed.APPROOV_BASE64_SECRET || '', 'base64');
 
-
 /**
- * Checks the validity of an Approov token
+ * Returns one of four shape names at random
  */
-const verifyApproovToken = function(approovTokenHeader) {
-  // Check that Approov token is present
-  if (!approovTokenHeader || !approovTokenHeader.length) {
-    // You may want to add some logging here.
-    return false;
-  }
-  // Check that Approov token is valid
-  try {
-    const approovToken = approovTokenHeader[0]
-    var decodedClaims = jwt.verify(approovToken, approovSecret, {algorithms: ["HS256"]});
-  } catch(err) {
-    // You may want to add some logging here.
-    return false;
-  }
-  // The Approov token was successfully verified
-  return true;
+const randomShapeName = function() {
+  const shapes = [
+    'Circle',
+    'Triangle',
+    'Square',
+    'Rectangle'
+  ]
+  return shapes[Math.floor((Math.random() * shapes.length))]
 }
 
 /**
  * Implements the hello RPC
  */
 function hello(call, callback) {
-  // Get the Approov token from the metadata and check its presence and validity
-  var approovTokenHeader = call.metadata.get('approov-token');
-  if (!verifyApproovToken(approovTokenHeader)) {
-    const error = new Error("Unauthorized");
-    console.log(error.message);
-    callback(error, null);
-    return;
-  }
-  // Approov token is valid, reply with a hello
   var reply = new messages.HelloReply();
   reply.setMessage(helloWorldMessage);
   console.log(reply.getMessage());
@@ -85,17 +65,26 @@ function hello(call, callback) {
 }
 
 /**
- * Starts an RPC server that receives requests for the Hello service at the configured server hostname and port
+ * Implements the shape RPC
+ */
+function shape(call, callback) {
+  var reply = new messages.ShapeReply();
+  reply.setMessage(randomShapeName());
+  console.log(reply.getMessage());
+  callback(null, reply);
+}
+
+/**
+ * Starts an RPC server that receives requests for the Shape service at the configured server hostname and port
  */
 function main() {
   var server = new grpc.Server();
-  server.addService(services.HelloService, {hello: hello});
+  server.addService(services.ShapeService, {hello: hello, shape: shape});
 
-  // Insecure connection
+  // Insecure connection (TLS termination is done by Traefik)
   let credentials = grpc.ServerCredentials.createInsecure();
-
   server.bindAsync(hostname + ':' + port, credentials, () => {
-    console.log(`Approov protected server running at ${hostname}:${port}`);
+    console.log(`Unprotected shapes server running at ${hostname}:${port}`);
     server.start();
   });
 }

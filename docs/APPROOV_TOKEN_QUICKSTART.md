@@ -65,7 +65,7 @@ APPROOV_BASE64_SECRET=approov-base64-encoded-secret-here
 
 ## Approov Token Check
 
-The main functionality for the Approov token check is in the file [src/approov-protected-server/token-check/hello-server-protected.js](/src/approov-protected-server/token-check/hello-server-protected.js). See the `verifyApproovToken()` function to find the code for the check.
+The main functionality for the Approov token check is in the file [src/hello/approov-protected-server/token-check/hello-server-protected.js](/src/hello/approov-protected-server/token-check/hello-server-protected.js). See the `verifyApproovToken()` function to find the code for the check.
 
 
 To check the Approov token we will use the [auth0/node-jsonwebtoken](https://github.com/auth0/node-jsonwebtoken#readme) package, but you are free to use another one of your preference.
@@ -116,7 +116,7 @@ function handleGRPC(call, callback) {
 
 > **NOTE:** When the Approov token validation fails we return an `Error("Unauthorized")` with no further information regarding the cause, because we do not want to give clues to an attacker about the reason the request failed.
 
-A fully working example for a simple Hello World server can be found at [src/approov-protected-server/token-check](/src/approov-protected-server/token-check).
+A fully working example for a simple Hello World server can be found at [src/hello/approov-protected-server/token-check](/src/hello/approov-protected-server/token-check).
 
 [TOC](#toc---table-of-contents)
 
