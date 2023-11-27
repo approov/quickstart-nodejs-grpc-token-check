@@ -130,7 +130,7 @@ approov api -add token-binding-grpc.demo.approov.io
 
 Generate an example token:
 ```shell
-approov token -genExample token-binding-grpc.demo.approov.io:443 -setDataHashInToken EXAMPLE_USER_AUTHORIZATON_CREDENTIALS
+approov token -genExample token-binding-grpc.demo.approov.io -setDataHashInToken EXAMPLE_USER_AUTHORIZATON_CREDENTIALS
 ```
 
 Make the request, replacing `APPROOV-TOKEN` with the token generated in the previous step:
