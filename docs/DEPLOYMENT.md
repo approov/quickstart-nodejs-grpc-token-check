@@ -51,15 +51,23 @@ In the directory `src/shapes-api`:
 
 ### Unprotected
 
+Make the request:
 ```shell
-grpcurl -proto shapes.proto -d '{"dummy": "test"}' unprotected-grpc.demo.approov.io shapes.Shape/Hello
+grpcurl -proto shapes.proto -d '{"dummy": "test"}' unprotected-grpc.demo.approov.io:443 shapes.Shape/Hello
+```
+You should see:
+```shell
 {
   "message": "Hello, World!"
 }
 ```
 
+The `Shape` request requires a valid API key:
 ```shell
-grpcurl -proto shapes.proto -d '{"dummy": "test"}' unprotected-grpc.demo.approov.io shapes.Shape/Shape
+grpcurl -proto shapes.proto -d '{"dummy": "test"}' -H 'API-Key: yXClypapWNHIifHUWmBIyPFAm' unprotected-grpc.demo.approov.io:443 shapes.Shape/Shape
+```
+You should see a response with a shape:
+```shell
 {
   "message": "Circle"
 }
@@ -69,14 +77,16 @@ grpcurl -proto shapes.proto -d '{"dummy": "test"}' unprotected-grpc.demo.approov
 
 The `Hello` request is always unprotected:
 ```shell
-grpcurl -proto shapes.proto -d '{"dummy": "test"}' token-grpc.demo.approov.io shapes.Shape/Hello
-
+grpcurl -proto shapes.proto -d '{"dummy": "test"}' token-grpc.demo.approov.io:443 shapes.Shape/Hello
+```
+You should see:
+```shell
 {
   "message": "Hello, World!"
 }
 ```
 
-Ensure that the GRPC API has been added to the Approov account:
+The `Shape` request requires a valid Approov token in addition to the API key. Ensure that the GRPC API has been added to the Approov account:
 ```shell
 approov api -add token-grpc.demo.approov.io
 ```
@@ -84,16 +94,17 @@ approov api -add token-grpc.demo.approov.io
 Generate an example token:
 ```shell
 approov token -genExample token-grpc.demo.approov.io
-
-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDA2NjY4MDMsImlwIjoiMS4yLjMuNCIsImRpZCI6IkV4YW1wbGVBcHByb292VG9rZW5ESUQ9PSJ9.xw0-InS1r-r2stGycs4tUPPwakXAM5oPb-QblTTOsiM
 ```
 
-Make the request (replace the example token with the token you generated in the previous step):
+Make the request, replacing `APPROOV-TOKEN` with the token generated in the previous step:
 ```shell
 grpcurl -proto shapes.proto -d '{"dummy": "test"}' \
-  -H 'Approov-Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDA2NjY4MDMsImlwIjoiMS4yLjMuNCIsImRpZCI6IkV4YW1wbGVBcHByb292VG9rZW5ESUQ9PSJ9.xw0-InS1r-r2stGycs4tUPPwakXAM5oPb-QblTTOsiM' \
-  token-grpc.demo.approov.io shapes.Shape/Shape
-
+  -H 'API-Key: yXClypapWNHIifHUWmBIyPFAm' \
+  -H 'Approov-Token: APPROOV-TOKEN' \
+  token-grpc.demo.approov.io:443 shapes.Shape/Shape
+```
+You should see a response with a shape:
+```shell
 {
   "message": "Rectangle"
 }
@@ -103,30 +114,35 @@ grpcurl -proto shapes.proto -d '{"dummy": "test"}' \
 
 The `Hello` request is always unprotected:
 ```shell
-grpcurl -proto shapes.proto -d '{"dummy": "test"}' token-binding-grpc.demo.approov.io shapes.Shape/Hello
-
+grpcurl -proto shapes.proto -d '{"dummy": "test"}' token-binding-grpc.demo.approov.io:443 shapes.Shape/Hello
+```
+You should see:
+```shell
 {
   "message": "Hello, World!"
 }
 ```
 
-Ensure that the GRPC API has been added to the Approov account:
+The `Shape` request requires a valid Approov token in addition to the API key. Ensure that the GRPC API has been added to the Approov account:
 ```shell
 approov api -add token-binding-grpc.demo.approov.io
 ```
 
 Generate an example token:
 ```shell
-approov token -genExample token-binding-grpc.demo.approov.io -setDataHashInToken EXAMPLE_USER_AUTHORIZATON_CREDENTIALS
+approov token -genExample token-binding-grpc.demo.approov.io:443 -setDataHashInToken EXAMPLE_USER_AUTHORIZATON_CREDENTIALS
 ```
 
-Make the request (replace the example token with the token you generated in the previous step):
+Make the request, replacing `APPROOV-TOKEN` with the token generated in the previous step:
 ```shell
 grpcurl -proto shapes.proto -d '{"dummy": "test"}' \
-  -H 'Approov-Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDA2Njc0ODYsImlwIjoiMS4yLjMuNCIsImRpZCI6IkV4YW1wbGVBcHByb292VG9rZW5ESUQ9PSIsInBheSI6ImRZalhtUXFFdUd4L1hsN2VXMU9aM3JWWUFBRmNEYmg1U3l2OEMxNnE5L0E9In0.YeEvmukUyGIzNpoo7NXb2ZMutImKWCU1_2E2m16b2RY' \
+  -H 'API-Key: yXClypapWNHIifHUWmBIyPFAm' \
+  -H 'Approov-Token: APPROOV-TOKEN' \
   -H 'Authorization: EXAMPLE_USER_AUTHORIZATON_CREDENTIALS' \
-  token-binding-grpc.demo.approov.io shapes.Shape/Shape
-
+  token-binding-grpc.demo.approov.io:443 shapes.Shape/Shape
+```
+You should see a response with a shape:
+```shell
 {
   "message": "Triangle"
 }
