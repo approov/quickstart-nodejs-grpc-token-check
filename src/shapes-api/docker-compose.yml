@@ -57,7 +57,7 @@ services:
       # Assign this frontend to entry point https. Overrides defaultEntryPoints.
       - "traefik.frontend.entryPoints=https"
       # The public host/domain name. Default: Host:{service}.{project_name}.{domain} when using docker-compose.
-      - "traefik.frontend.rule=Host:grpc.${SHAPES_PUBLIC_DOMAIN:-${BASE_PUBLIC_DOMAIN}},token-grpc.${BASE_PUBLIC_DOMAIN}"
+      - "traefik.frontend.rule=Host:grpc.${SHAPES_PUBLIC_DOMAIN? Missing value for: SHAPES_PUBLIC_DOMAIN},token-grpc.${BASE_PUBLIC_DOMAIN}"
       # The internal container port, not the public one that Traefik listens to.
       - "traefik.port=${GRPC_PORT:-50051}"
       # Override the default http protocol
