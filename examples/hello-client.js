@@ -26,7 +26,8 @@ const services = require('./hello_grpc_pb');
 function main() {
   // Get arguments
   var argv = parseArgs(process.argv.slice(2), {
-    string: ['target', 'token', 'auth']
+    string: ['target', 'token', 'auth'],
+    boolean: ['tls']
   });
   // Target
   var target;
@@ -48,9 +49,16 @@ function main() {
     authorization = argv.auth;
     console.log('Authorization:', authorization);
   }
-  
-  // Insecure connection
-  const credentials = grpc.credentials.createInsecure();
+  // TLS
+  var credentials;
+  if (argv.tls) {
+    // Secure connection
+    credentials = grpc.credentials.createSsl();
+  } else {
+    // Insecure connection
+    credentials = grpc.credentials.createInsecure();
+  }
+
   var client = new services.HelloClient(target, credentials);
 
   // Create request

@@ -1,4 +1,5 @@
 .env
-hello_grpc_pb.js
-hello_pb.js
 node_modules
+
+.DS_store
+
