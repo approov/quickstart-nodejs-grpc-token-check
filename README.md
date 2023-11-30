@@ -62,24 +62,24 @@ The quickstart code for the Approov NodeJS server is split into two implementati
 * [Approov token check quickstart](/docs/APPROOV_TOKEN_QUICKSTART.md)
 * [Approov token check with token binding quickstart](/docs/APPROOV_TOKEN_BINDING_QUICKSTART.md)
 
-Both the protected servers are built from the unprotected example server defined in the [src/unprotected-server/hello-server-unprotected.js](/src/unprotected-server/hello-server-unprotected.js) directory. You can use your favourite file comparison tool to see the differences between them, or you can use Git like this:
+Both the protected servers are built from the unprotected example server defined in the [src/hello/unprotected-server/hello-server-unprotected.js](/src/hello/unprotected-server/hello-server-unprotected.js) directory. You can use your favourite file comparison tool to see the differences between them, or you can use Git like this:
 
 Code difference between the Approov token checking server and the original unprotected server:
 
 ```
-git diff --no-index src/unprotected-server/hello-server-unprotected.js src/approov-protected-server/token-check/hello-server-protected.js
+git diff --no-index src/hello/unprotected-server/hello-server-unprotected.js src/hello/approov-protected-server/token-check/hello-server-protected.js
 ```
 
 Similarly for the Approov token binding checking server:
 
 ```
-git diff --no-index src/unprotected-server/hello-server-unprotected.js src/approov-protected-server/token-binding-check/hello-server-protected.js
+git diff --no-index src/hello/unprotected-server/hello-server-unprotected.js src/hello/approov-protected-server/token-binding-check/hello-server-protected.js
 ```
 
 Or you can compare the code difference between the two Approov protected servers:
 
 ```
-git diff --no-index src/approov-protected-server/token-check/hello-server-protected.js src/approov-protected-server/token-binding-check/hello-server-protected.js
+git diff --no-index src/hello/approov-protected-server/token-check/hello-server-protected.js src/hello/approov-protected-server/token-binding-check/hello-server-protected.js
 ```
 
 [TOC](#toc---table-of-contents)
@@ -97,11 +97,11 @@ git diff --no-index src/approov-protected-server/token-check/hello-server-protec
 
 You can find the example GRPC client that is used in the following examples in the [examples directory](/examples).
 
-The unprotected server is located in the [src/unprotected-server directory](/src/unprotected-server) and you can find the Approov protected servers in the [/src/approov-protected-server/token-check](/src/approov-protected-server/token-check) and [/src/approov-protected-server/token-binding-check](/src/approov-protected-server/token-binding-check) directories, respectively.
+The unprotected server is located in the [`src/hello/unprotected-server`](/src/hello/unprotected-server) directory and you can find the Approov protected servers in the [`/src/hello/approov-protected-server/token-check`](/src/hello/approov-protected-server/token-check) and [`/src/hello/approov-protected-server/token-binding-check`](/src/hello/approov-protected-server/token-binding-check) directories, respectively.
 
 ### Unprotected
 
-In a shell, in the `src/unprotected-server` directory, execute the following command to start the unprotected server:
+In a shell, in the `src/hello/unprotected-server` directory, execute the following command to start the unprotected server:
 ```
 npm install
 npm start
@@ -157,11 +157,11 @@ enter password:
 note: secret is base64 encoded and must be decoded to its binary form to verify Approov tokens
 h+CX0tOzdAAR9l15bWAqvq7w9olk66daIH+Xk+IAHhVVHszjDzeGobzNnqyRze3lw/WVyWrc2gZfh3XXfBOmww==
 ```
-For the server to use the secret, you need to set `APPROOV_BASE64_SECRET`, in the `.env` file in the Approov integration example server directory [src/approov-protected-server/token-ckeck](/src/approov-protected-server/token-ckeck), to the value retrieved in the previous step. For this, copy the file `.env.example` to `.env`, open `.env` in an editor and replace the text `<approov_base64_secret_here>` with the secret, like in this example:
+For the server to use the secret, you need to set `APPROOV_BASE64_SECRET`, in the `.env` file in the Approov integration example server directory [src/hello/approov-protected-server/token-check](/src/hello/approov-protected-server/token-check), to the value retrieved in the previous step. For this, copy the file `.env.example` from the `src/hello` directory to `.env` in the `src/hello/approov-protected-server/token-check` directory. Open `.env` in an editor and replace the text `approov-base64-encoded-secret-here` with the secret, like in this example:
 ```
 APPROOV_BASE64_SECRET=h+CX0tOzdAAR9l15bWAqvq7w9olk66daIH+Xk+IAHhVVHszjDzeGobzNnqyRze3lw/WVyWrc2gZfh3XXfBOmww==
 ```
-In a shell, in the `src/approov-protected-server/token-ckeck` directory, execute the following command to start the Approov protected server:
+In a shell, in the `src/hello/approov-protected-server/token-check` directory, execute the following command to start the Approov protected server:
 ```
 npm install
 npm start
@@ -242,7 +242,7 @@ You can also check what happens if the token is missing - by issuing the `npm st
 
 ### Approov Token Binding Protected
 
-Setting up and starting the Approov protected server with token binding in the [src/approov-protected-server/token-binding-check directory](/src/approov-protected-server/token-binding-check) is essentially the same as setting up the server without token binding. You can copy the `.env` file containing the secret from `src/approov-protected-server/token-check` and then, in a shell, in the `src/approov-protected-server/token-binding-check` directory, start the server with the command:
+Setting up and starting the Approov protected server with token binding in the [src/hello/approov-protected-server/token-binding-check directory](/src/hello/approov-protected-server/token-binding-check) is essentially the same as setting up the server without token binding. You can copy the `.env` file containing the secret from `src/hello/approov-protected-server/token-check` and then, in a shell, in the `src/hello/approov-protected-server/token-binding-check` directory, start the server with the command:
 ```
 npm start
 ```
