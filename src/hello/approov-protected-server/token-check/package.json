@@ -10,7 +10,7 @@
   "author": "johanness@criticalblue.com",
   "license": "MIT",
   "dependencies": {
-    "@grpc/grpc-js": "^1.5.4",
+    "@grpc/grpc-js": "^1.8.8",
     "configuration": "^2.4.2",
     "debug": "^4.3.3",
     "dotenv": "^8.6.0",
