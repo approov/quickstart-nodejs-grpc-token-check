@@ -10,8 +10,8 @@
   "author": "johanness@criticalblue.com",
   "license": "MIT",
   "dependencies": {
-    "google-protobuf": "^3.19.4",
-    "@grpc/grpc-js": "^1.9.15",
-    "minimist": "^1.2.5"
+    "google-protobuf": "^3.21.4",
+    "@grpc/grpc-js": "^1.11.1",
+    "minimist": "^1.2.8"
   }
 }
