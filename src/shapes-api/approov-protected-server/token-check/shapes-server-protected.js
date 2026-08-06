@@ -21,29 +21,28 @@ const messages = require('./shapes_pb');
 const services = require('./shapes_grpc_pb');
 
 const debug = require('debug')('shapes-server')
-const dotenv = require('dotenv').config();
+const dotenv = require('dotenv').config({quiet: true});
 const grpc = require('@grpc/grpc-js');
 const jwt = require('jsonwebtoken');
 
-if (dotenv.error) {
+if (dotenv.error && dotenv.error.code !== 'ENOENT') {
   console.debug('FAILED TO PARSE `.env` FILE | ' + dotenv.error);
-  console.log('Not using .env file, using built-in defaults');
 }
 
 /** Message contained in a hello reply */
 const helloWorldMessage = "Hello, World!"
 
 /** API key */
-const apiSecretKey = "yXClypapWNHIifHUWmBIyPFAm"
+const apiSecretKey = process.env.SHAPES_API_KEY || "yXClypapWNHIifHUWmBIyPFAm"
 
 // The hostname. To run in a docker container add to the .env file `SERVER_HOSTNAME=0.0.0.0`.
-const hostname = dotenv?.parsed?.SERVER_HOSTNAME || 'localhost';
+const hostname = process.env.SERVER_HOSTNAME || 'localhost';
 
 // The port from the .env file. Defaults to 50051
-const port = dotenv?.parsed?.GRPC_PORT || 50051;
+const port = process.env.GRPC_PORT || 50051;
 
 // The decoded Approv secret
-const approovSecret = Buffer.from(dotenv.parsed.APPROOV_BASE64_SECRET || '', 'base64');
+const approovSecret = Buffer.from(process.env.APPROOV_BASE64_SECRET || '', 'base64');
 
 /**
  * Returns one of four shape names at random
@@ -157,9 +156,11 @@ function main() {
 
   // Insecure connection (TLS termination is done by Traefik)
   let credentials = grpc.ServerCredentials.createInsecure();
-  server.bindAsync(hostname + ':' + port, credentials, () => {
+  server.bindAsync(hostname + ':' + port, credentials, (error) => {
+    if (error) {
+      throw error;
+    }
     console.log(`Approov protected shapes server running at ${hostname}:${port}`);
-    server.start();
   });
 }
 
