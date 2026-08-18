@@ -328,7 +328,7 @@ If you wish to explore the Approov solution in more depth, then why not try one 
 * [Approov Blog](https://blog.approov.io)
 * [Approov Resources](https://approov.io/resource/)
 * [Approov Customer Stories](https://approov.io/customer)
-* [Approov Support](https://approov.zendesk.com/hc/en-gb/requests/new)
+* [Approov Support](https://approov.io/info/technical-support)
 * [About Us](https://approov.io/company)
 * [Contact Us](https://approov.io/contact)
 
